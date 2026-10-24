@@ -1,0 +1,340 @@
+{
+  "entities": {
+    "FamilyDevice": {
+      "title": "FamilyDevice",
+      "description": "Represents a paired phone (Main Controller or Connected Device) signed into the same Google account.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Authenticated Google account UID."
+        },
+        "deviceName": {
+          "type": "string",
+          "description": "Human-readable name of the phone."
+        },
+        "role": {
+          "type": "string",
+          "enum": ["CONTROLLER", "CONNECTED"],
+          "description": "Role of the device in the family connection."
+        },
+        "pairingCode": {
+          "type": "string",
+          "description": "6-digit pairing verification code."
+        },
+        "isPaired": {
+          "type": "boolean",
+          "description": "Whether initial pairing handshake and consent are completed."
+        },
+        "isOnline": {
+          "type": "boolean",
+          "description": "Whether device is currently online."
+        },
+        "autoReconnect": {
+          "type": "boolean",
+          "description": "Whether secure automatic reconnection is enabled."
+        },
+        "batteryLevel": {
+          "type": "integer",
+          "description": "Current battery percentage (0-100)."
+        },
+        "isCharging": {
+          "type": "boolean",
+          "description": "Whether battery is currently charging."
+        },
+        "networkType": {
+          "type": "string",
+          "description": "Current network transport (Wi-Fi, 5G, LTE, etc.)."
+        },
+        "latitude": {
+          "type": "number",
+          "description": "Real-time GPS latitude."
+        },
+        "longitude": {
+          "type": "number",
+          "description": "Real-time GPS longitude."
+        },
+        "locationAccuracy": {
+          "type": "number",
+          "description": "GPS accuracy in meters."
+        },
+        "locationLabel": {
+          "type": "string",
+          "description": "Human-readable location or coordinates summary."
+        },
+        "cameraConsentGranted": {
+          "type": "boolean",
+          "description": "Explicit user consent for live camera access."
+        },
+        "micConsentGranted": {
+          "type": "boolean",
+          "description": "Explicit user consent for live microphone audio streaming."
+        },
+        "locationConsentGranted": {
+          "type": "boolean",
+          "description": "Explicit user consent for real-time GPS sharing."
+        },
+        "activeCameraFacing": {
+          "type": "string",
+          "enum": ["OFF", "FRONT", "BACK"],
+          "description": "Currently active camera stream mode."
+        },
+        "isMicStreaming": {
+          "type": "boolean",
+          "description": "Whether live microphone audio is actively streaming."
+        },
+        "isTwoWayVoiceActive": {
+          "type": "boolean",
+          "description": "Whether two-way voice intercom is active."
+        },
+        "audioLevelDb": {
+          "type": "integer",
+          "description": "Live microphone sound level in dB (0-120)."
+        },
+        "latestFrameBase64": {
+          "type": "string",
+          "description": "Latest encrypted/encoded JPEG preview frame when camera streaming is active."
+        },
+        "latestAudioBase64": {
+          "type": "string",
+          "description": "Latest encrypted/encoded PCM/AAC audio frame when voice streaming is active."
+        },
+        "remoteCommand": {
+          "type": "string",
+          "description": "Remote control command sent from the Main Device Controller."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of device registration via FieldValue.serverTimestamp()."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of last heartbeat/telemetry update via FieldValue.serverTimestamp()."
+        }
+      },
+      "required": [
+        "userId",
+        "deviceName",
+        "role",
+        "pairingCode",
+        "isPaired",
+        "isOnline",
+        "autoReconnect",
+        "batteryLevel",
+        "isCharging",
+        "networkType",
+        "latitude",
+        "longitude",
+        "locationAccuracy",
+        "locationLabel",
+        "cameraConsentGranted",
+        "micConsentGranted",
+        "locationConsentGranted",
+        "activeCameraFacing",
+        "isMicStreaming",
+        "isTwoWayVoiceActive",
+        "audioLevelDb",
+        "latestFrameBase64",
+        "latestAudioBase64",
+        "remoteCommand",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "WebRtcSignal": {
+      "title": "WebRtcSignal",
+      "description": "WebRTC SDP offer/answer and ICE candidate signaling packet between paired family devices.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Authenticated Google account UID."
+        },
+        "senderDeviceId": {
+          "type": "string",
+          "description": "Source device ID."
+        },
+        "targetDeviceId": {
+          "type": "string",
+          "description": "Destination device ID."
+        },
+        "type": {
+          "type": "string",
+          "enum": ["OFFER", "ANSWER", "ICE_CANDIDATE", "BYE", "PING"],
+          "description": "WebRTC signaling message type."
+        },
+        "sdpOrCandidate": {
+          "type": "string",
+          "description": "SDP payload or ICE candidate string."
+        },
+        "mediaMode": {
+          "type": "string",
+          "enum": ["CAMERA_FRONT", "CAMERA_BACK", "AUDIO_STREAM", "TWO_WAY_VOICE"],
+          "description": "Media stream mode being negotiated."
+        },
+        "encryptionFingerprint": {
+          "type": "string",
+          "description": "DTLS-SRTP / AES-GCM key fingerprint."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp via FieldValue.serverTimestamp()."
+        }
+      },
+      "required": [
+        "userId",
+        "senderDeviceId",
+        "targetDeviceId",
+        "type",
+        "sdpOrCandidate",
+        "mediaMode",
+        "encryptionFingerprint",
+        "createdAt"
+      ]
+    },
+    "EncryptedChatMessage": {
+      "title": "EncryptedChatMessage",
+      "description": "WhatsApp-style encrypted family chat message, voice note, camera snapshot, or location pin.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Authenticated Google account UID."
+        },
+        "senderDeviceId": {
+          "type": "string",
+          "description": "Device ID that sent the message."
+        },
+        "senderName": {
+          "type": "string",
+          "description": "Display name of the sending device."
+        },
+        "senderRole": {
+          "type": "string",
+          "enum": ["CONTROLLER", "CONNECTED"],
+          "description": "Role of the sending device."
+        },
+        "messageType": {
+          "type": "string",
+          "enum": ["TEXT", "VOICE_NOTE", "SNAPSHOT", "LOCATION_PIN", "SYSTEM_ALERT"],
+          "description": "Type of chat message."
+        },
+        "cipherText": {
+          "type": "string",
+          "description": "AES-GCM encrypted payload."
+        },
+        "plainPreview": {
+          "type": "string",
+          "description": "Message text or summary."
+        },
+        "mediaBase64": {
+          "type": "string",
+          "description": "Optional encoded media payload for snapshot or voice note."
+        },
+        "durationSec": {
+          "type": "integer",
+          "description": "Voice note duration in seconds."
+        },
+        "isDelivered": {
+          "type": "boolean",
+          "description": "Whether message was delivered to connected devices."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp via FieldValue.serverTimestamp()."
+        }
+      },
+      "required": [
+        "userId",
+        "senderDeviceId",
+        "senderName",
+        "senderRole",
+        "messageType",
+        "cipherText",
+        "plainPreview",
+        "mediaBase64",
+        "durationSec",
+        "isDelivered",
+        "createdAt"
+      ]
+    },
+    "ConnectionEvent": {
+      "title": "ConnectionEvent",
+      "description": "Immutable connection history and privacy consent audit log.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Authenticated Google account UID."
+        },
+        "deviceId": {
+          "type": "string",
+          "description": "Device ID that triggered the event."
+        },
+        "deviceName": {
+          "type": "string",
+          "description": "Device display name."
+        },
+        "eventType": {
+          "type": "string",
+          "enum": [
+            "PAIRED",
+            "CONNECTED",
+            "RECONNECTED",
+            "CAMERA_SESSION",
+            "MIC_SESSION",
+            "VOICE_CALL",
+            "LOCATION_SYNC",
+            "CONSENT_CHANGED",
+            "BATTERY_ALERT"
+          ],
+          "description": "Category of connection history event."
+        },
+        "details": {
+          "type": "string",
+          "description": "Detailed description of the event."
+        },
+        "encryptedFlag": {
+          "type": "boolean",
+          "description": "Whether the session used encrypted transport."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp via FieldValue.serverTimestamp()."
+        }
+      },
+      "required": [
+        "userId",
+        "deviceId",
+        "deviceName",
+        "eventType",
+        "details",
+        "encryptedFlag",
+        "createdAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/devices/{deviceId}": {
+      "schema": "FamilyDevice",
+      "description": "Paired family devices (Main Controller and Connected Devices) for a user."
+    },
+    "/users/{userId}/signals/{signalId}": {
+      "schema": "WebRtcSignal",
+      "description": "WebRTC SDP and ICE candidate signaling messages between a user's paired devices."
+    },
+    "/users/{userId}/messages/{messageId}": {
+      "schema": "EncryptedChatMessage",
+      "description": "WhatsApp-style encrypted family chat, voice notes, snapshots, and location pins."
+    },
+    "/users/{userId}/history/{eventId}": {
+      "schema": "ConnectionEvent",
+      "description": "Connection history and consent audit trail."
+    }
+  }
+}

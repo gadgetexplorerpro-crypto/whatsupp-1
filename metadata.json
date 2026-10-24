@@ -1,0 +1,6 @@
+{
+  "name": "Whatsupp",
+  "description": "Family device connection app with live camera, audio, GPS tracking, two-way voice, and WhatsApp-style dashboard",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

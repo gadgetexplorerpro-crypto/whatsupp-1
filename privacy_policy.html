@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Whatsupp</title>
+    <style>
+        :root {
+            --bg-color: #0b141a;
+            --card-bg: #111b21;
+            --card-border: #222d34;
+            --primary: #00a884;
+            --primary-dark: #005c4b;
+            --text-main: #e9edef;
+            --text-muted: #8696a0;
+            --accent: #25d366;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--card-border);
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            color: var(--accent);
+            margin: 0 0 8px 0;
+            font-size: 28px;
+        }
+        .header p {
+            color: var(--text-muted);
+            margin: 0;
+            font-size: 14px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        h2 {
+            color: var(--accent);
+            font-size: 20px;
+            margin-top: 0;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 8px;
+        }
+        ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .badge {
+            display: inline-block;
+            background-color: rgba(37, 211, 102, 0.15);
+            color: var(--accent);
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            padding: 40px 20px;
+            border-top: 1px solid var(--card-border);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Whatsupp</h1>
+        <p>Family Device Link & Live Monitor — Privacy Policy</p>
+        <p style="margin-top: 8px; font-size: 12px; color: #53bdeb;">Effective Date: October 24, 2026</p>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <span class="badge">OVERVIEW & COMMITMENT</span>
+            <h2>1. Introduction & Family Privacy Scope</h2>
+            <p>Welcome to <strong>Whatsupp</strong> ("we", "our", or "the App"). Whatsupp is designed exclusively for transparent, mutual family device connection, baby monitoring, elder assistance, and multi-device awareness.</p>
+            <p>Users sign in using their Google account to link their family phones. One device operates as the <strong>Main Device (Controller)</strong> and the other as the <strong>Connected Device</strong>. We do not sell, rent, or monetize your personal data with third-party advertisers or data brokers.</p>
+        </div>
+
+        <div class="card">
+            <span class="badge">PERMISSIONS & DATA</span>
+            <h2>2. Information We Process & How It Is Used</h2>
+            <ul>
+                <li><strong>Camera Access (Front & Back):</strong> Used solely to provide live visual streaming between paired family devices. Camera access requires explicit user consent and triggers a persistent, visible on-screen green shield privacy banner and system notification whenever active.</li>
+                <li><strong>Microphone & Audio Streaming:</strong> Used for live ambient audio streaming and two-way voice walkie-talkie communication between paired family devices. Requires explicit microphone permission and user consent.</li>
+                <li><strong>Precise Location (GPS):</strong> Used to calculate proximity distance between family devices and render device location on the family map. Location data is never used for commercial ad targeting.</li>
+                <li><strong>Device Health & Telemetry:</strong> Battery level, charging state, and network connectivity type (Wi-Fi or cellular) are synchronized to help family members verify device operational status.</li>
+                <li><strong>Local Encrypted Storage:</strong> Saved snapshots and chat history are encrypted on the device using AES-256-GCM hardware-backed keys provided by Android Keystore.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <span class="badge">SECURITY ARCHITECTURE</span>
+            <h2>3. End-to-End Encryption & Cloud Security</h2>
+            <p>All peer-to-peer live media streaming is negotiated via WebRTC using DTLS-SRTP encryption protocols. Cloud synchronization is powered by Google Firebase Firestore with strict zero-trust security rules:</p>
+            <ul>
+                <li>Only the authenticated Google account owner can read or write documents associated with their device profile.</li>
+                <li>Cross-user data access is strictly denied at the database rule layer.</li>
+                <li>Signaling messages are ephemeral and discarded after peer connection setup.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <span class="badge">NO THIRD-PARTY TRACKING</span>
+            <h2>4. Third-Party Disclosures & Analytics</h2>
+            <p>Whatsupp contains <strong>NO advertising SDKs</strong>, commercial behavior tracking libraries, or analytics aggregators. We do not share your camera feeds, audio recordings, location logs, or chat messages with any third parties.</p>
+        </div>
+
+        <div class="card">
+            <span class="badge">USER RIGHTS & DELETION</span>
+            <h2>5. Account & Data Deletion (Google Play Compliance)</h2>
+            <p>You have complete control over your data:</p>
+            <ul>
+                <li><strong>In-App Deletion:</strong> You can permanently wipe your account and all associated cloud data at any time inside the app by navigating to <em>Account & Data Privacy &gt; Delete Account & Wipe Data</em>.</li>
+                <li><strong>Web-Based Deletion Request:</strong> You can also request complete account and data deletion via our dedicated web portal: <a href="delete_account.html" style="color: #25d366;">Account & Data Deletion Request Page</a>.</li>
+                <li>Upon confirmation, all device profiles, signaling logs, encrypted chat messages, and Google account associations are immediately and permanently erased.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <span class="badge">CONTACT</span>
+            <h2>6. Contact Us</h2>
+            <p>If you have any questions or feedback regarding this Privacy Policy or your data rights, please contact our family safety team at: <strong style="color: #25d366;">gadgetexplorerpro@gmail.com</strong>.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Whatsupp Family Device Link. All rights reserved.</p>
+    </footer>
+</body>
+</html>

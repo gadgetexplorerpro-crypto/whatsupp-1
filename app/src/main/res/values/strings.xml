@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Whatsupp</string>
+    <string name="tagline">Family Device Link &amp; Live Monitor</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="role_controller">Main Device (Controller)</string>
+    <string name="role_connected">Connected Device</string>
+    <string name="tab_devices">Devices</string>
+    <string name="tab_camera">Live Cam</string>
+    <string name="tab_voice">Audio &amp; Voice</string>
+    <string name="tab_map">Live GPS</string>
+    <string name="tab_chat">Vault Chat</string>
+    <string name="privacy_banner_active">ACTIVE PRIVACY INDICATOR: Live hardware access consented &amp; visible</string>
+    <string name="encrypted_badge">AES-256-GCM Local Vault + DTLS-SRTP WebRTC</string>
+    <string name="privacy_policy_url">https://ais-pre-7aisvxfk2kxo5q4kmi33bv-861509315491.asia-east1.run.app/privacy-policy</string>
+    <string name="account_deletion_url">https://ais-pre-7aisvxfk2kxo5q4kmi33bv-861509315491.asia-east1.run.app/delete-account</string>
+    <string name="manage_account_privacy">Account &amp; Data Privacy</string>
+    <string name="delete_account">Delete Account &amp; Wipe Data</string>
+</resources>

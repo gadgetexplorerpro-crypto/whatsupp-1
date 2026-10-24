@@ -1,0 +1,231 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Pillar 1: Global Default-Deny Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Global Primitives
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Validation Helper 1: FamilyDevice
+    function isValidFamilyDevice(data) {
+      return data.userId is string && data.userId == request.auth.uid && data.userId.size() >= 1 && data.userId.size() <= 128 &&
+             data.deviceName is string && data.deviceName.size() >= 1 && data.deviceName.size() <= 80 &&
+             data.role is string && (data.role == 'CONTROLLER' || data.role == 'CONNECTED') &&
+             data.pairingCode is string && data.pairingCode.size() >= 6 && data.pairingCode.size() <= 12 &&
+             data.isPaired is bool &&
+             data.isOnline is bool &&
+             data.autoReconnect is bool &&
+             data.batteryLevel is int && data.batteryLevel >= 0 && data.batteryLevel <= 100 &&
+             data.isCharging is bool &&
+             data.networkType is string && data.networkType.size() >= 1 && data.networkType.size() <= 40 &&
+             (data.latitude is int || data.latitude is float) && data.latitude >= -90.0 && data.latitude <= 90.0 &&
+             (data.longitude is int || data.longitude is float) && data.longitude >= -180.0 && data.longitude <= 180.0 &&
+             (data.locationAccuracy is int || data.locationAccuracy is float) && data.locationAccuracy >= 0.0 && data.locationAccuracy <= 10000.0 &&
+             data.locationLabel is string && data.locationLabel.size() <= 200 &&
+             data.cameraConsentGranted is bool &&
+             data.micConsentGranted is bool &&
+             data.locationConsentGranted is bool &&
+             data.activeCameraFacing is string && (data.activeCameraFacing == 'OFF' || data.activeCameraFacing == 'FRONT' || data.activeCameraFacing == 'BACK') &&
+             data.isMicStreaming is bool &&
+             data.isTwoWayVoiceActive is bool &&
+             data.audioLevelDb is int && data.audioLevelDb >= 0 && data.audioLevelDb <= 120 &&
+             data.latestFrameBase64 is string && data.latestFrameBase64.size() <= 350000 &&
+             data.latestAudioBase64 is string && data.latestAudioBase64.size() <= 200000 &&
+             data.remoteCommand is string && data.remoteCommand.size() >= 1 && data.remoteCommand.size() <= 64 &&
+             data.createdAt is timestamp && data.createdAt <= request.time &&
+             data.updatedAt is timestamp && data.updatedAt <= request.time;
+    }
+
+    // Validation Helper 2: WebRtcSignal
+    function isValidWebRtcSignal(data) {
+      return data.userId is string && data.userId == request.auth.uid && data.userId.size() >= 1 && data.userId.size() <= 128 &&
+             data.senderDeviceId is string && data.senderDeviceId.size() >= 1 && data.senderDeviceId.size() <= 128 &&
+             data.targetDeviceId is string && data.targetDeviceId.size() >= 1 && data.targetDeviceId.size() <= 128 &&
+             data.type is string && (data.type == 'OFFER' || data.type == 'ANSWER' || data.type == 'ICE_CANDIDATE' || data.type == 'BYE' || data.type == 'PING') &&
+             data.sdpOrCandidate is string && data.sdpOrCandidate.size() >= 1 && data.sdpOrCandidate.size() <= 60000 &&
+             data.mediaMode is string && (data.mediaMode == 'CAMERA_FRONT' || data.mediaMode == 'CAMERA_BACK' || data.mediaMode == 'AUDIO_STREAM' || data.mediaMode == 'TWO_WAY_VOICE') &&
+             data.encryptionFingerprint is string && data.encryptionFingerprint.size() >= 1 && data.encryptionFingerprint.size() <= 256 &&
+             data.createdAt is timestamp && data.createdAt <= request.time;
+    }
+
+    // Validation Helper 3: EncryptedChatMessage
+    function isValidEncryptedChatMessage(data) {
+      return data.userId is string && data.userId == request.auth.uid && data.userId.size() >= 1 && data.userId.size() <= 128 &&
+             data.senderDeviceId is string && data.senderDeviceId.size() >= 1 && data.senderDeviceId.size() <= 128 &&
+             data.senderName is string && data.senderName.size() >= 1 && data.senderName.size() <= 80 &&
+             data.senderRole is string && (data.senderRole == 'CONTROLLER' || data.senderRole == 'CONNECTED') &&
+             data.messageType is string && (data.messageType == 'TEXT' || data.messageType == 'VOICE_NOTE' || data.messageType == 'SNAPSHOT' || data.messageType == 'LOCATION_PIN' || data.messageType == 'SYSTEM_ALERT') &&
+             data.cipherText is string && data.cipherText.size() >= 1 && data.cipherText.size() <= 10000 &&
+             data.plainPreview is string && data.plainPreview.size() >= 1 && data.plainPreview.size() <= 500 &&
+             data.mediaBase64 is string && data.mediaBase64.size() <= 300000 &&
+             data.durationSec is int && data.durationSec >= 0 && data.durationSec <= 600 &&
+             data.isDelivered is bool &&
+             data.createdAt is timestamp && data.createdAt <= request.time;
+    }
+
+    // Validation Helper 4: ConnectionEvent
+    function isValidConnectionEvent(data) {
+      return data.userId is string && data.userId == request.auth.uid && data.userId.size() >= 1 && data.userId.size() <= 128 &&
+             data.deviceId is string && data.deviceId.size() >= 1 && data.deviceId.size() <= 128 &&
+             data.deviceName is string && data.deviceName.size() >= 1 && data.deviceName.size() <= 80 &&
+             data.eventType is string && (
+               data.eventType == 'PAIRED' ||
+               data.eventType == 'CONNECTED' ||
+               data.eventType == 'RECONNECTED' ||
+               data.eventType == 'CAMERA_SESSION' ||
+               data.eventType == 'MIC_SESSION' ||
+               data.eventType == 'VOICE_CALL' ||
+               data.eventType == 'LOCATION_SYNC' ||
+               data.eventType == 'CONSENT_CHANGED' ||
+               data.eventType == 'BATTERY_ALERT'
+             ) &&
+             data.details is string && data.details.size() >= 1 && data.details.size() <= 500 &&
+             data.encryptedFlag is bool &&
+             data.createdAt is timestamp && data.createdAt <= request.time;
+    }
+
+    match /users/{userId} {
+      // 1. Paired Family Devices Collection
+      match /devices/{deviceId} {
+        allow get: if isOwner(userId) && isValidId(userId) && isValidId(deviceId);
+        allow list: if isOwner(userId) && existing().userId == request.auth.uid;
+
+        allow create: if isOwner(userId) &&
+                         isValidId(userId) &&
+                         isValidId(deviceId) &&
+                         incoming().keys().hasAll([
+                           'userId', 'deviceName', 'role', 'pairingCode', 'isPaired',
+                           'isOnline', 'autoReconnect', 'batteryLevel', 'isCharging',
+                           'networkType', 'latitude', 'longitude', 'locationAccuracy',
+                           'locationLabel', 'cameraConsentGranted', 'micConsentGranted',
+                           'locationConsentGranted', 'activeCameraFacing', 'isMicStreaming',
+                           'isTwoWayVoiceActive', 'audioLevelDb', 'latestFrameBase64',
+                           'latestAudioBase64', 'remoteCommand', 'createdAt', 'updatedAt'
+                         ]) &&
+                         incoming().keys().hasOnly([
+                           'userId', 'deviceName', 'role', 'pairingCode', 'isPaired',
+                           'isOnline', 'autoReconnect', 'batteryLevel', 'isCharging',
+                           'networkType', 'latitude', 'longitude', 'locationAccuracy',
+                           'locationLabel', 'cameraConsentGranted', 'micConsentGranted',
+                           'locationConsentGranted', 'activeCameraFacing', 'isMicStreaming',
+                           'isTwoWayVoiceActive', 'audioLevelDb', 'latestFrameBase64',
+                           'latestAudioBase64', 'remoteCommand', 'createdAt', 'updatedAt'
+                         ]) &&
+                         isValidFamilyDevice(incoming());
+
+        allow update: if isOwner(userId) &&
+                         isValidId(userId) &&
+                         isValidId(deviceId) &&
+                         isValidFamilyDevice(incoming()) &&
+                         incoming().userId == existing().userId &&
+                         incoming().createdAt == existing().createdAt &&
+                         incoming().diff(existing()).affectedKeys().hasOnly([
+                           'deviceName', 'role', 'pairingCode', 'isPaired',
+                           'isOnline', 'autoReconnect', 'batteryLevel', 'isCharging',
+                           'networkType', 'latitude', 'longitude', 'locationAccuracy',
+                           'locationLabel', 'cameraConsentGranted', 'micConsentGranted',
+                           'locationConsentGranted', 'activeCameraFacing', 'isMicStreaming',
+                           'isTwoWayVoiceActive', 'audioLevelDb', 'latestFrameBase64',
+                           'latestAudioBase64', 'remoteCommand', 'updatedAt'
+                         ]);
+
+        allow delete: if isOwner(userId) && isValidId(userId) && isValidId(deviceId);
+      }
+
+      // 2. WebRTC Signaling Collection
+      match /signals/{signalId} {
+        allow get: if isOwner(userId) && isValidId(userId) && isValidId(signalId);
+        allow list: if isOwner(userId) && existing().userId == request.auth.uid;
+
+        allow create: if isOwner(userId) &&
+                         isValidId(userId) &&
+                         isValidId(signalId) &&
+                         incoming().keys().hasAll([
+                           'userId', 'senderDeviceId', 'targetDeviceId', 'type',
+                           'sdpOrCandidate', 'mediaMode', 'encryptionFingerprint', 'createdAt'
+                         ]) &&
+                         incoming().keys().hasOnly([
+                           'userId', 'senderDeviceId', 'targetDeviceId', 'type',
+                           'sdpOrCandidate', 'mediaMode', 'encryptionFingerprint', 'createdAt'
+                         ]) &&
+                         isValidWebRtcSignal(incoming());
+
+        allow update: if false;
+        allow delete: if isOwner(userId) && isValidId(userId) && isValidId(signalId);
+      }
+
+      // 3. Encrypted Chat & Media Messages Collection
+      match /messages/{messageId} {
+        allow get: if isOwner(userId) && isValidId(userId) && isValidId(messageId);
+        allow list: if isOwner(userId) && existing().userId == request.auth.uid;
+
+        allow create: if isOwner(userId) &&
+                         isValidId(userId) &&
+                         isValidId(messageId) &&
+                         incoming().keys().hasAll([
+                           'userId', 'senderDeviceId', 'senderName', 'senderRole',
+                           'messageType', 'cipherText', 'plainPreview', 'mediaBase64',
+                           'durationSec', 'isDelivered', 'createdAt'
+                         ]) &&
+                         incoming().keys().hasOnly([
+                           'userId', 'senderDeviceId', 'senderName', 'senderRole',
+                           'messageType', 'cipherText', 'plainPreview', 'mediaBase64',
+                           'durationSec', 'isDelivered', 'createdAt'
+                         ]) &&
+                         isValidEncryptedChatMessage(incoming());
+
+        allow update: if isOwner(userId) &&
+                         isValidId(userId) &&
+                         isValidId(messageId) &&
+                         isValidEncryptedChatMessage(incoming()) &&
+                         incoming().userId == existing().userId &&
+                         incoming().createdAt == existing().createdAt &&
+                         incoming().diff(existing()).affectedKeys().hasOnly(['isDelivered']);
+
+        allow delete: if isOwner(userId) && isValidId(userId) && isValidId(messageId);
+      }
+
+      // 4. Connection History & Privacy Audit Log Collection (Append-Only)
+      match /history/{eventId} {
+        allow get: if isOwner(userId) && isValidId(userId) && isValidId(eventId);
+        allow list: if isOwner(userId) && existing().userId == request.auth.uid;
+
+        allow create: if isOwner(userId) &&
+                         isValidId(userId) &&
+                         isValidId(eventId) &&
+                         incoming().keys().hasAll([
+                           'userId', 'deviceId', 'deviceName', 'eventType',
+                           'details', 'encryptedFlag', 'createdAt'
+                         ]) &&
+                         incoming().keys().hasOnly([
+                           'userId', 'deviceId', 'deviceName', 'eventType',
+                           'details', 'encryptedFlag', 'createdAt'
+                         ]) &&
+                         isValidConnectionEvent(incoming());
+
+        allow update, delete: if false;
+      }
+    }
+  }
+}

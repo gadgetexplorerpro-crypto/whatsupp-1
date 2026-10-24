@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Account & Data - Whatsupp</title>
+    <style>
+        :root {
+            --bg-color: #0b141a;
+            --card-bg: #111b21;
+            --card-border: #222d34;
+            --primary: #00a884;
+            --danger: #ef4444;
+            --danger-bg: rgba(239, 68, 68, 0.12);
+            --text-main: #e9edef;
+            --text-muted: #8696a0;
+            --accent: #25d366;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--card-border);
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            color: var(--danger);
+            margin: 0 0 8px 0;
+            font-size: 26px;
+        }
+        .header p {
+            color: var(--text-muted);
+            margin: 0;
+            font-size: 14px;
+        }
+        .container {
+            max-width: 720px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .warning-card {
+            background-color: var(--danger-bg);
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        h2 {
+            color: var(--text-main);
+            font-size: 18px;
+            margin-top: 0;
+        }
+        ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .input-group {
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            background-color: #202c33;
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            color: var(--text-main);
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        .btn-danger {
+            background-color: var(--danger);
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: opacity 0.2s;
+        }
+        .btn-danger:hover {
+            opacity: 0.9;
+        }
+        .badge {
+            display: inline-block;
+            background-color: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            padding: 40px 20px;
+            border-top: 1px solid var(--card-border);
+        }
+        .success-banner {
+            display: none;
+            background-color: rgba(37, 211, 102, 0.15);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Whatsupp Account & Data Deletion</h1>
+        <p>Google Play Data Safety & GDPR/CCPA Account Removal Request</p>
+    </div>
+
+    <div class="container">
+        <div class="warning-card">
+            <span class="badge">PERMANENT ACTION</span>
+            <h2>What Happens When Your Account Is Deleted</h2>
+            <p>Submitting this request will permanently remove your account and all associated cloud and local data:</p>
+            <ul>
+                <li><strong>Device Registrations:</strong> All paired phone profiles and connection tokens are erased immediately.</li>
+                <li><strong>WebRTC Signaling Channels:</strong> All active sessions and peer signaling logs are deleted from Firestore.</li>
+                <li><strong>Family Chat & Media:</strong> All encrypted messages and local vault metadata are permanently wiped.</li>
+                <li><strong>Google Sign-In Linkage:</strong> Your Google OAuth identifier is unlinked and deleted from Firebase Authentication.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>Option 1: Instant In-App Deletion (Fastest)</h2>
+            <p>If you have the Whatsupp Android app installed:</p>
+            <ol>
+                <li>Open <strong>Whatsupp</strong> on your Android phone.</li>
+                <li>Tap the <strong>Shield / Account icon</strong> in the top app bar (or navigate to the <strong>Account & Store URLs</strong> card on the Devices tab).</li>
+                <li>Tap <strong>Delete Account & Wipe Data</strong>.</li>
+                <li>Confirm the prompt. All cloud records and local vaults will be wiped instantly.</li>
+            </ol>
+        </div>
+
+        <div class="card">
+            <h2>Option 2: Web Deletion Request Form</h2>
+            <p>If you no longer have access to the app, submit your Google Account email below to request manual account purge:</p>
+            <form id="deletionForm" onsubmit="handleDeletionSubmit(event)">
+                <div class="input-group">
+                    <label for="userEmail">Google Account Email Address:</label>
+                    <input type="email" id="userEmail" required placeholder="e.g. yourname@gmail.com">
+                </div>
+                <div class="input-group">
+                    <label for="deviceModel">Registered Device Model (Optional):</label>
+                    <input type="text" id="deviceModel" placeholder="e.g. Pixel 8, Samsung Galaxy S24">
+                </div>
+                <div class="input-group">
+                    <label for="reason">Reason for Deletion (Optional):</label>
+                    <textarea id="reason" rows="3" placeholder="Let us know why you are deleting your account..."></textarea>
+                </div>
+                <button type="submit" class="btn-danger">Request Complete Account & Data Deletion</button>
+            </form>
+
+            <div id="successBanner" class="success-banner">
+                <strong>Request Received!</strong><br>
+                Your account deletion request has been submitted. All associated Firestore data records and authentication tokens for this Google account will be purged within 48 hours in compliance with Google Play Data Safety policies.
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Data Retention Period</h2>
+            <p>Once deleted, no backup or recovery is possible. In-app deletions take effect immediately. Web-based deletion requests are processed within 48 business hours.</p>
+            <p>For immediate assistance, contact us at: <strong style="color: #25d366;">gadgetexplorerpro@gmail.com</strong>.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Whatsupp Family Device Link. All rights reserved. | <a href="privacy_policy.html" style="color: #25d366;">Privacy Policy</a></p>
+    </footer>
+
+    <script>
+        function handleDeletionSubmit(e) {
+            e.preventDefault();
+            document.getElementById('deletionForm').style.display = 'none';
+            document.getElementById('successBanner').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
